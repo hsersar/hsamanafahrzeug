@@ -1,0 +1,35 @@
+@model FahrzeugZulassung.Application.DTOs.Email.MitarbeiterAktiviertEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Mitarbeiter-Account aktiviert";
+}
+
+<h2>Ihr Mitarbeiter-Account wurde aktiviert</h2>
+
+<p>Hallo @Model.MitarbeiterName,</p>
+
+<p>Ihr Zugang zum KFZ-Zulassungsservice wurde erfolgreich eingerichtet.</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Zugangsdaten</h3>
+    <p><strong>E-Mail:</strong> @Model.Email</p>
+    <p><small>Sie haben Ihr Passwort bereits bei der Registrierung festgelegt.</small></p>
+</div>
+
+<center>
+    <a href="@Model.LoginUrl" class="button">Zur Anwendung</a>
+</center>
+
+<h3>Erste Schritte:</h3>
+<ol>
+    <li>Mit Ihren Zugangsdaten anmelden</li>
+    <li>Profil vervollständigen</li>
+    <li>Aufträge bearbeiten</li>
+</ol>
+
+<p>Bei Fragen wenden Sie sich bitte an Ihren Administrator.</p>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

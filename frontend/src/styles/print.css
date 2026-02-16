@@ -1,0 +1,92 @@
+@media print {
+  /* Hide non-printable elements */
+  nav,
+  .sidebar,
+  .bottom-nav,
+  footer,
+  .no-print,
+  button,
+  .action-buttons {
+    display: none !important;
+  }
+
+  /* Reset page layout */
+  * {
+    box-shadow: none !important;
+  }
+
+  body {
+    font-size: 10pt;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Show print header */
+  .print-header {
+    display: block !important;
+    margin-bottom: 2rem;
+  }
+
+  /* Optimize tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f3f4f6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Avoid page breaks inside elements */
+  .page-break {
+    page-break-before: always;
+  }
+
+  tr,
+  img,
+  blockquote {
+    page-break-inside: avoid;
+  }
+
+  /* Optimize headings */
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  /* Show URLs for links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
+  /* Don't show URLs for internal links */
+  a[href^="#"]:after,
+  a[href^="/"]:after {
+    content: "";
+  }
+
+  /* Page margins */
+  @page {
+    margin: 2cm;
+  }
+
+  /* Page numbers */
+  .page-number:after {
+    content: counter(page);
+  }
+}
