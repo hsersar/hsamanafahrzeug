@@ -1,0 +1,65 @@
+# .gitignore for HsaManageFahrzeug Deployment
+
+# Environment files (NEVER commit secrets!)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Docker volumes and data
+postgres_data/
+redis_data/
+grafana_data/
+prometheus_data/
+
+# SSL Certificates
+certbot/
+
+# Logs
+logs/
+*.log
+
+# Backups
+backups/
+*.sql
+*.sql.gz
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+
+# Build artifacts
+dist/
+build/
+node_modules/
+bin/
+obj/
+
+# Package manager locks (commit these!)
+# package-lock.json
+# yarn.lock
+
+# Coverage reports
+coverage/
+*.lcov
