@@ -96,6 +96,9 @@ public static class SeedData
             SecurityStamp = Guid.NewGuid().ToString()
         };
 
+        // NOTE: This password is for development/seeding only. 
+        // In production, the admin should change this immediately after first login.
+        // TODO: Consider using environment variable or secure configuration for initial password.
         var result = await userManager.CreateAsync(adminUser, "Admin@123456789");
 
         if (result.Succeeded)

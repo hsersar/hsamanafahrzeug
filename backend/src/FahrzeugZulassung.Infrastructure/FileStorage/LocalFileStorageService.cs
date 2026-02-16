@@ -167,7 +167,23 @@ public class LocalFileStorageService : IFileStorageService
         {
             var extension = Path.GetExtension(sanitized);
             var nameWithoutExtension = Path.GetFileNameWithoutExtension(sanitized);
-            sanitized = nameWithoutExtension.Substring(0, 255 - extension.Length) + extension;
+            
+            // Ensure extension is not longer than 255 characters
+            if (extension.Length >= 255)
+            {
+                extension = extension.Substring(0, 10); // Keep first 10 chars of extension
+            }
+            
+            var maxNameLength = 255 - extension.Length;
+            if (maxNameLength > 0 && nameWithoutExtension.Length > maxNameLength)
+            {
+                sanitized = nameWithoutExtension.Substring(0, maxNameLength) + extension;
+            }
+            else if (maxNameLength <= 0)
+            {
+                // Extension too long, create a simple name
+                sanitized = Guid.NewGuid().ToString() + extension.Substring(0, 10);
+            }
         }
 
         return sanitized;
