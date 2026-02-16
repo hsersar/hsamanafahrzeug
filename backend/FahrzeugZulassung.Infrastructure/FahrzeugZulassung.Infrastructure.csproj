@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\FahrzeugZulassung.Application\FahrzeugZulassung.Application.csproj" />
     <ProjectReference Include="..\FahrzeugZulassung.Domain\FahrzeugZulassung.Domain.csproj" />
   </ItemGroup>
 

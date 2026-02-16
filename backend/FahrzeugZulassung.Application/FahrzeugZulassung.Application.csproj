@@ -2,12 +2,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FahrzeugZulassung.Domain\FahrzeugZulassung.Domain.csproj" />
+    <ProjectReference Include="..\FahrzeugZulassung.Infrastructure\FahrzeugZulassung.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.*" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.*" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.*" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.*" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -11,7 +11,7 @@ public class AuditLogDto
     public Guid Id { get; set; }
     public string Aktion { get; set; } = string.Empty;
     public string Entitaet { get; set; } = string.Empty;
-    public Guid? EntitaetId { get; set; }
+    public string? EntitaetId { get; set; }
     public string? BenutzerId { get; set; }
     public string? BenutzerName { get; set; }
     public DateTime Zeitstempel { get; set; }
