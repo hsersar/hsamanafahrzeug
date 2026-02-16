@@ -136,14 +136,15 @@ public class TrackingService : ITrackingService
     public string GeneriereTrackingCode()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        var random = new Random();
+        var bytes = RandomNumberGenerator.GetBytes(16);
         
-        var part1 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
-        var part2 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
-        var part3 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
-        var part4 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
-
-        return $"TRK-{part1}-{part2}-{part3}-{part4}";
+        var result = new char[16];
+        for (int i = 0; i < 16; i++)
+        {
+            result[i] = chars[bytes[i] % chars.Length];
+        }
+        
+        return $"TRK-{new string(result, 0, 4)}-{new string(result, 4, 4)}-{new string(result, 8, 4)}-{new string(result, 12, 4)}";
     }
 
     public string GeneriereTrackingToken()
