@@ -1,0 +1,60 @@
+.zahlungs-seite {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.payment-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.payment-header h1 {
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+.amount {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.amount-label {
+  color: #666;
+}
+
+.amount-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.pay-button {
+  width: 100%;
+  padding: 16px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s;
+}
+
+.pay-button:hover:not(:disabled) {
+  background: #218838;
+}
+
+.pay-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.payment-result {
+  margin-top: 30px;
+}
