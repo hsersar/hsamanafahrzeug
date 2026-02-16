@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FahrzeugZulassung.API/FahrzeugZulassung.API.csproj" />
+    <Project Path="src/FahrzeugZulassung.Application/FahrzeugZulassung.Application.csproj" />
+    <Project Path="src/FahrzeugZulassung.Domain/FahrzeugZulassung.Domain.csproj" />
+    <Project Path="src/FahrzeugZulassung.Infrastructure/FahrzeugZulassung.Infrastructure.csproj" />
+  </Folder>
+</Solution>
