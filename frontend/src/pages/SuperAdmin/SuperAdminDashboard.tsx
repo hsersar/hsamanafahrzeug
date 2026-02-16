@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { provisionsApi } from '../services/provisionsApi';
-import { monatsabrechnungApi } from '../services/monatsabrechnungApi';
-import type { ProvisionsModellDto, MonatsabrechnungDto, PlattformUmsatzDto } from '../types/provision';
+import { provisionsApi } from '../../services/provisionsApi';
+import { monatsabrechnungApi } from '../../services/monatsabrechnungApi';
+import type { ProvisionsModellDto, MonatsabrechnungDto, PlattformUmsatzDto } from '../../types/provision';
 
 export const SuperAdminDashboard: React.FC = () => {
   const [standardModell, setStandardModell] = useState<ProvisionsModellDto | null>(null);
@@ -135,7 +135,7 @@ export const SuperAdminDashboard: React.FC = () => {
               </div>
             </div>
             <div style={{ padding: '15px', backgroundColor: '#e0f2f1', borderRadius: '8px' }}>
-              <div style={{ fontSize: '14px', color: '#666' }}>Bezahlte Abrechnungen</div>
+              <div style={{ fontSize: '14px', color: '#666' }}>Bezahlter Gesamtbetrag</div>
               <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
                 {plattformUmsatz.bezahlteAbrechnungen.toFixed(2)} €
               </div>
