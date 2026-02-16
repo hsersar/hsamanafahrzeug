@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FahrzeugZulassung.API/FahrzeugZulassung.API.csproj" />
+  <Project Path="FahrzeugZulassung.Application/FahrzeugZulassung.Application.csproj" />
+  <Project Path="FahrzeugZulassung.Domain/FahrzeugZulassung.Domain.csproj" />
+  <Project Path="FahrzeugZulassung.Infrastructure/FahrzeugZulassung.Infrastructure.csproj" />
+</Solution>

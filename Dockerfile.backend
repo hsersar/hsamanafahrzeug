@@ -1,0 +1,49 @@
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy project files
+COPY ["FahrzeugZulassung.API/FahrzeugZulassung.API.csproj", "FahrzeugZulassung.API/"]
+COPY ["FahrzeugZulassung.Application/FahrzeugZulassung.Application.csproj", "FahrzeugZulassung.Application/"]
+COPY ["FahrzeugZulassung.Domain/FahrzeugZulassung.Domain.csproj", "FahrzeugZulassung.Domain/"]
+COPY ["FahrzeugZulassung.Infrastructure/FahrzeugZulassung.Infrastructure.csproj", "FahrzeugZulassung.Infrastructure/"]
+
+# Restore dependencies
+RUN dotnet restore "FahrzeugZulassung.API/FahrzeugZulassung.API.csproj"
+
+# Copy everything else
+COPY . .
+
+# Build
+WORKDIR "/src/FahrzeugZulassung.API"
+RUN dotnet build "FahrzeugZulassung.API.csproj" -c Release -o /app/build
+
+# Publish
+FROM build AS publish
+RUN dotnet publish "FahrzeugZulassung.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Create non-root user for security
+RUN adduser --disabled-password --gecos '' appuser && \
+    mkdir -p /app/logs /app/uploads && \
+    chown -R appuser:appuser /app
+
+# Copy published files
+COPY --from=publish /app/publish .
+
+# Switch to non-root user
+USER appuser
+
+# Expose ports
+EXPOSE 8080
+EXPOSE 8081
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# Start the application
+ENTRYPOINT ["dotnet", "FahrzeugZulassung.API.dll"]

@@ -1,0 +1,164 @@
+version: '3.8'
+
+# Production Docker Compose configuration for Hetzner deployment
+# This file includes additional production settings:
+# - Resource limits
+# - Health checks
+# - Logging configuration
+# - Restart policies
+# - Security settings
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fahrzeugzulassung-db-prod
+    environment:
+      POSTGRES_DB: FahrzeugZulassung
+      POSTGRES_USER: fahrzeug_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Performance tuning
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=de_DE.UTF-8"
+    ports:
+      - "127.0.0.1:5432:5432"  # Only bind to localhost for security
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./backups:/backups  # Mount backup directory
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fahrzeug_user -d FahrzeugZulassung"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - fahrzeugzulassung-network
+    restart: unless-stopped
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Security
+    security_opt:
+      - no-new-privileges:true
+    read_only: false  # PostgreSQL needs write access
+    tmpfs:
+      - /tmp
+      - /run/postgresql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
+    container_name: fahrzeugzulassung-api-prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database Configuration
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=FahrzeugZulassung;Username=fahrzeug_user;Password=${POSTGRES_PASSWORD};SSL Mode=Prefer;Trust Server Certificate=true"
+      
+      # JWT Configuration
+      JwtSettings__Secret: ${JWT_SECRET}
+      JwtSettings__Issuer: FahrzeugZulassung
+      JwtSettings__Audience: FahrzeugZulassungApp
+      JwtSettings__AccessTokenExpiration: 15
+      JwtSettings__RefreshTokenExpiration: 10080
+      
+      # CORS Configuration - Update with your domain
+      CorsSettings__AllowedOrigins__0: https://${DOMAIN:-localhost}
+      CorsSettings__AllowedOrigins__1: https://www.${DOMAIN:-localhost}
+      CorsSettings__AllowedOrigins__2: https://api.${DOMAIN:-localhost}
+      
+      # File Storage
+      FileStorage__Path: /app/uploads
+      
+      # Rate Limiting
+      IpRateLimiting__EnableEndpointRateLimiting: "true"
+      IpRateLimiting__GeneralRules__0__Endpoint: "*"
+      IpRateLimiting__GeneralRules__0__Period: "1m"
+      IpRateLimiting__GeneralRules__0__Limit: 100
+      
+      # Logging
+      Serilog__MinimumLevel__Default: Information
+      Serilog__MinimumLevel__Override__Microsoft: Warning
+      Serilog__MinimumLevel__Override__System: Warning
+      Serilog__MinimumLevel__Override__Microsoft.EntityFrameworkCore: Warning
+      
+      # ASP.NET Core
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      
+      # Trust proxy headers from nginx
+      ASPNETCORE_FORWARDED_HEADERS: "XForwardedFor,XForwardedProto"
+    ports:
+      - "127.0.0.1:5001:8080"  # Only bind to localhost, nginx will reverse proxy
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-logs:/app/logs
+    networks:
+      - fahrzeugzulassung-network
+    restart: unless-stopped
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    # Security
+    security_opt:
+      - no-new-privileges:true
+    read_only: false  # App needs write access for uploads and logs
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/hsamanafahrzeug/data/postgres
+  backend-uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/hsamanafahrzeug/data/uploads
+  backend-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/hsamanafahrzeug/data/logs
+
+networks:
+  fahrzeugzulassung-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
