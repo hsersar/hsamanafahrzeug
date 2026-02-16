@@ -1,0 +1,32 @@
+@model FahrzeugZulassung.Application.DTOs.Email.ZahlungsBestaetigungEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Zahlungsbestätigung";
+}
+
+<center>
+    <div style="font-size: 60px; margin: 20px 0;">✅</div>
+</center>
+
+<h2 style="text-align: center; color: #10b981;">Zahlung erfolgreich</h2>
+
+<p>Hallo @Model.KundenName,</p>
+
+<p>wir haben Ihre Zahlung erfolgreich erhalten. Vielen Dank!</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Zahlungsdetails</h3>
+    <p><strong>Betrag:</strong> @Model.Betrag.ToString("C")</p>
+    <p><strong>Zahlungsmethode:</strong> @Model.ZahlungsMethode</p>
+    <p><strong>Datum:</strong> @Model.ZahlungsDatum.ToString("dd.MM.yyyy HH:mm")</p>
+    <p><strong>Rechnungsnummer:</strong> @Model.RechnungsNummer</p>
+</div>
+
+<center>
+    <a href="@Model.RechnungsDownloadUrl" class="button">Rechnung herunterladen</a>
+</center>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

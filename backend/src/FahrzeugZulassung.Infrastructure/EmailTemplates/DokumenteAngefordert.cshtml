@@ -1,0 +1,33 @@
+@model FahrzeugZulassung.Application.DTOs.Email.DokumenteAngefordertEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Dokumente angefordert";
+}
+
+<h2>Dokumente werden benötigt</h2>
+
+<p>Hallo @Model.KundenName,</p>
+
+<p>Für die Bearbeitung Ihres Auftrags benötigen wir noch folgende Dokumente:</p>
+
+<div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Fehlende Dokumente:</h3>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        @foreach (var dokument in Model.FehlendeDokumente)
+        {
+            <li>@dokument</li>
+        }
+    </ul>
+    <p style="margin-bottom: 0;"><strong>Frist für Upload:</strong> @Model.Frist.ToString("dd.MM.yyyy")</p>
+</div>
+
+<center>
+    <a href="@Model.UploadUrl" class="button">Dokumente hochladen</a>
+</center>
+
+<p>Bitte laden Sie die Dokumente rechtzeitig hoch, damit wir Ihren Auftrag bearbeiten können.</p>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

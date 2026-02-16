@@ -1,0 +1,48 @@
+@model FahrzeugZulassung.Application.DTOs.Email.RechnungErstelltEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Rechnung erstellt";
+}
+
+<h2>Ihre Rechnung wurde erstellt</h2>
+
+<p>Hallo @Model.KundenName,</p>
+
+<p>wir haben Ihre Rechnung erstellt.</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Rechnungszusammenfassung</h3>
+    <p><strong>Rechnungsnummer:</strong> @Model.RechnungsNummer</p>
+    <table style="width: 100%; margin-top: 15px;">
+        <tr>
+            <td>Nettobetrag:</td>
+            <td style="text-align: right;">@Model.NettoSumme.ToString("C")</td>
+        </tr>
+        <tr>
+            <td>MwSt. (19%):</td>
+            <td style="text-align: right;">@Model.MwSt.ToString("C")</td>
+        </tr>
+        <tr style="border-top: 2px solid #d1d5db;">
+            <td><strong>Gesamtbetrag:</strong></td>
+            <td style="text-align: right;"><strong>@Model.BruttoSumme.ToString("C")</strong></td>
+        </tr>
+    </table>
+    <p style="margin-top: 15px;"><strong>Zahlungsfrist:</strong> @Model.Zahlungsfrist.ToString("dd.MM.yyyy")</p>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.GiroCodeBase64))
+{
+    <center>
+        <p><strong>Bezahlen per QR-Code (GiroCode):</strong></p>
+        <img src="data:image/png;base64,@Model.GiroCodeBase64" alt="GiroCode" style="max-width: 200px;"/>
+    </center>
+}
+
+<center>
+    <a href="@Model.ZahlungsUrl" class="button">Jetzt bezahlen</a>
+</center>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

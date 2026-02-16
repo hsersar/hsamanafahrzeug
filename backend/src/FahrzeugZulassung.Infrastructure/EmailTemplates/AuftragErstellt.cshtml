@@ -1,0 +1,39 @@
+@model FahrzeugZulassung.Application.DTOs.Email.AuftragErstelltEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Auftrag erstellt";
+}
+
+<h2>Ihr Auftrag wurde erfolgreich erstellt</h2>
+
+<p>Hallo @Model.KundenName,</p>
+
+<p>vielen Dank für Ihren Auftrag. Wir haben Ihre Anfrage zur <strong>@Model.AuftragTyp</strong> erhalten.</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Auftragsdetails</h3>
+    <p><strong>Typ:</strong> @Model.AuftragTyp</p>
+    <p><strong>Kennzeichen:</strong> @Model.Kennzeichen</p>
+    <p><strong>Tracking-Code:</strong> @Model.TrackingCode</p>
+    <p><strong>Erstellt am:</strong> @Model.ErstelltAm.ToString("dd.MM.yyyy HH:mm")</p>
+    <p><strong>Standort:</strong> @Model.StandortName</p>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.QRCodeBase64))
+{
+    <center>
+        <p><strong>Ihr Tracking QR-Code:</strong></p>
+        <img src="data:image/png;base64,@Model.QRCodeBase64" alt="Tracking QR-Code" style="max-width: 200px;"/>
+    </center>
+}
+
+<center>
+    <a href="@Model.TrackingUrl" class="button">Status verfolgen</a>
+</center>
+
+<p>Sie erhalten weitere Updates per E-Mail, sobald sich der Status Ihres Auftrags ändert.</p>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

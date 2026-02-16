@@ -1,0 +1,38 @@
+@model FahrzeugZulassung.Application.DTOs.Email.TrackingInfoEmailModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Tracking-Informationen";
+}
+
+<h2>Verfolgen Sie Ihren Auftrag</h2>
+
+<p>Hallo @Model.KundenName,</p>
+
+<p>Mit dem folgenden QR-Code oder Tracking-Code können Sie jederzeit den Status Ihres Auftrags verfolgen.</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+    @if (!string.IsNullOrEmpty(Model.QRCodeBase64))
+    {
+        <img src="data:image/png;base64,@Model.QRCodeBase64" alt="Tracking QR-Code" style="max-width: 250px; margin: 20px auto;"/>
+    }
+    <p><strong>Tracking-Code:</strong></p>
+    <div style="font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #2563eb; margin: 10px 0;">
+        @Model.TrackingCode
+    </div>
+</div>
+
+<h3>So verfolgen Sie Ihren Antrag:</h3>
+<ol>
+    <li>Scannen Sie den QR-Code mit Ihrem Smartphone</li>
+    <li>Oder nutzen Sie den Tracking-Code auf unserer Website</li>
+    <li>Sie sehen sofort den aktuellen Status</li>
+</ol>
+
+<center>
+    <a href="@Model.TrackingUrl" class="button">Status online prüfen</a>
+</center>
+
+<p>
+    Mit freundlichen Grüßen<br>
+    Ihr KFZ-Zulassungsservice Team
+</p>

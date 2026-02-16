@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #2563eb;
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        h2 {
+            color: #1f2937;
+            font-size: 20px;
+            margin-top: 0;
+        }
+        p {
+            line-height: 1.6;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table class="container" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px;">
+                    <tr>
+                        <td class="header">
+                            <h1>🚗 KFZ-Zulassungsservice</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content">
+                            @RenderBody()
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            <p>
+                                <strong>KFZ-Zulassungsservice GmbH</strong><br>
+                                Musterstraße 123, 12345 Musterstadt<br>
+                                Tel: +49 (0) 123 456789 | E-Mail: info@kfz-zulassung.de
+                            </p>
+                            <p>
+                                <a href="#">Datenschutz</a> | <a href="#">Impressum</a> | <a href="#">Kontakt</a>
+                            </p>
+                            <p style="margin-top: 20px;">
+                                © 2026 KFZ-Zulassungsservice. Alle Rechte vorbehalten.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
