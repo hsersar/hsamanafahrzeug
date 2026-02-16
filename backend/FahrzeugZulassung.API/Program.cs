@@ -8,6 +8,7 @@ using System.Text;
 using FluentValidation;
 using AspNetCoreRateLimit;
 using FahrzeugZulassung.API.Middleware;
+using FahrzeugZulassung.API.Services;
 using FahrzeugZulassung.Application.Interfaces;
 using FahrzeugZulassung.Application.Services;
 using FahrzeugZulassung.Application.Validators;
@@ -180,6 +181,7 @@ builder.Services.AddScoped<IMitarbeiterService, MitarbeiterService>();
 builder.Services.AddScoped<IStandortService, StandortService>();
 builder.Services.AddScoped<IRechnungService, RechnungService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IIKfzService, MockIKfzService>();
 
 // Configure File Storage
 var storagePath = builder.Configuration["FileStorage:Path"] ?? "uploads";
@@ -204,6 +206,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    // Also enable Swagger in production for API testing
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fahrzeug Zulassung API v1");
+    });
     app.UseHsts();
 }
 
@@ -218,6 +226,10 @@ app.UseAuthorization();
 
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<AuditLoggingMiddleware>();
+
+// Health check endpoint
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
+   .AllowAnonymous();
 
 app.MapControllers();
 

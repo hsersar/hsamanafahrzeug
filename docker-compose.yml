@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fahrzeugzulassung-db
+    environment:
+      POSTGRES_DB: FahrzeugZulassung
+      POSTGRES_USER: fahrzeug_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Change_This_Password_123!}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fahrzeug_user -d FahrzeugZulassung"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fahrzeugzulassung-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
+    container_name: fahrzeugzulassung-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database Configuration
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=FahrzeugZulassung;Username=fahrzeug_user;Password=${POSTGRES_PASSWORD:-Change_This_Password_123!}"
+      
+      # JWT Configuration
+      JwtSettings__Secret: ${JWT_SECRET:-YourSuperSecretKeyThatIsAtLeast32CharactersLong!}
+      JwtSettings__Issuer: FahrzeugZulassung
+      JwtSettings__Audience: FahrzeugZulassungApp
+      JwtSettings__AccessTokenExpiration: 15
+      JwtSettings__RefreshTokenExpiration: 10080
+      
+      # CORS Configuration
+      CorsSettings__AllowedOrigins__0: http://localhost:3000
+      CorsSettings__AllowedOrigins__1: http://localhost:5173
+      
+      # File Storage
+      FileStorage__Path: /app/uploads
+      
+      # Rate Limiting
+      IpRateLimiting__EnableEndpointRateLimiting: true
+      IpRateLimiting__GeneralRules__0__Endpoint: "*"
+      IpRateLimiting__GeneralRules__0__Period: "1m"
+      IpRateLimiting__GeneralRules__0__Limit: 100
+      
+      # Logging
+      Serilog__MinimumLevel__Default: Information
+      Serilog__MinimumLevel__Override__Microsoft: Warning
+      Serilog__MinimumLevel__Override__System: Warning
+      
+      # ASP.NET Core
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ASPNETCORE_URLS: http://+:8080
+    ports:
+      - "5001:8080"
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-logs:/app/logs
+    networks:
+      - fahrzeugzulassung-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    driver: local
+  backend-uploads:
+    driver: local
+  backend-logs:
+    driver: local
+
+networks:
+  fahrzeugzulassung-network:
+    driver: bridge
