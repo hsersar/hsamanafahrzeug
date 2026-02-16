@@ -47,6 +47,12 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<FahrzeugZulassungDbContext>();
     db.Database.EnsureCreated();
+    
+    // Seed initial data
+    FahrzeugZulassung.Infrastructure.DbSeeder.SeedData(app.Services);
 }
 
 app.Run();
+
+// Make the implicit Program class public for testing
+public partial class Program { }
