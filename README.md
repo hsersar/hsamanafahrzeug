@@ -13,6 +13,31 @@ Full Docker containerization with PostgreSQL database.
 ### Migrations: COMPLETE ✅
 EF Core migrations created and auto-apply on startup.
 
+### Hetzner Deployment: READY ✅
+Complete deployment guides and automation scripts for Hetzner Cloud.
+
+## 🚀 Quick Deployment
+
+### Deploy to Hetzner Cloud (15 minutes)
+See the comprehensive German guide: **[SCHNELLSTART_HETZNER.md](SCHNELLSTART_HETZNER.md)**
+
+Or the full English guide: **[DEPLOYMENT_HETZNER.md](DEPLOYMENT_HETZNER.md)**
+
+**Estimated cost**: From €4/month (development) to €14/month (production)
+
+```bash
+# On your Hetzner server:
+curl -fsSL https://raw.githubusercontent.com/hsersar/hsamanafahrzeug/main/scripts/setup-hetzner.sh | bash
+```
+
+### Deploy Locally with Docker
+```bash
+cp .env.example .env
+docker-compose up -d
+```
+
+Access at: http://localhost:5001/swagger
+
 ## Features
 
 ### Architecture
