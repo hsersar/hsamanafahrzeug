@@ -34,7 +34,10 @@ public class RegistrationController : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
                      ?? User.FindFirstValue("sub") 
-                     ?? throw new UnauthorizedAccessException("User ID not found in claims");
+                     ?? string.Empty;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
 
         var request = new RegistrationRequest
         {
@@ -92,7 +95,10 @@ public class RegistrationController : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
                      ?? User.FindFirstValue("sub") 
-                     ?? throw new UnauthorizedAccessException("User ID not found");
+                     ?? string.Empty;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
 
         var requests = await _registrationRepository.GetByUserIdAsync(userId);
         return Ok(requests.Select(MapToDto));

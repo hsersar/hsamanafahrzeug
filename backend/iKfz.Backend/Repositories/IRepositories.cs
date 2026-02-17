@@ -20,3 +20,39 @@ public interface IRegistrationRequestRepository
     Task<RegistrationRequest> CreateAsync(RegistrationRequest request);
     Task<RegistrationRequest?> UpdateAsync(RegistrationRequest request);
 }
+
+public interface IPersonalProfileRepository
+{
+    Task<PersonalProfile?> GetByUserIdAsync(string userId);
+    Task<PersonalProfile> CreateOrUpdateAsync(PersonalProfile profile);
+}
+
+public interface ICompanyProfileRepository
+{
+    Task<CompanyProfile?> GetByUserIdAsync(string userId);
+    Task<CompanyProfile> CreateOrUpdateAsync(CompanyProfile profile);
+}
+
+public interface IPaymentMethodRepository
+{
+    Task<IEnumerable<PaymentMethod>> GetByUserIdAsync(string userId);
+    Task<PaymentMethod?> GetByIdAsync(int id);
+    Task<PaymentMethod> CreateAsync(PaymentMethod method);
+    Task<PaymentMethod?> UpdateAsync(PaymentMethod method);
+    Task<bool> DeleteAsync(int id, string userId);
+    Task SetDefaultAsync(int id, string userId);
+}
+
+public interface IInvoiceRepository
+{
+    Task<IEnumerable<Invoice>> GetByUserIdAsync(string userId);
+    Task<Invoice?> GetByIdAsync(int id);
+    Task<Invoice> CreateAsync(Invoice invoice);
+    Task<Invoice?> UpdateStatusAsync(int id, InvoiceStatus status);
+}
+
+public interface IAnnouncementRepository
+{
+    Task<IEnumerable<Announcement>> GetActiveAsync();
+    Task<Announcement> CreateAsync(Announcement announcement);
+}

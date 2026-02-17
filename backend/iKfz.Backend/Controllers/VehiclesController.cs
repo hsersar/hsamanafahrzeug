@@ -31,7 +31,10 @@ public class VehiclesController : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
                      ?? User.FindFirstValue("sub")
-                     ?? throw new UnauthorizedAccessException("User ID not found");
+                     ?? string.Empty;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
 
         var vehicles = await _vehicleService.GetUserVehiclesAsync(userId);
         
@@ -87,5 +90,16 @@ public class VehiclesController : ControllerBase
         };
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Get catalog of vehicle brands and models for suggestions
+    /// </summary>
+    [HttpGet("catalog")]
+    [ProducesResponseType(typeof(IEnumerable<VehicleCatalogItemDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<VehicleCatalogItemDto>>> GetCatalog()
+    {
+        var catalog = await _vehicleService.GetVehicleCatalogAsync();
+        return Ok(catalog);
     }
 }

@@ -59,3 +59,9 @@ public class VehicleDto
     public DateTime FirstRegistrationDate { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class VehicleCatalogItemDto
+{
+    public required string Brand { get; set; }
+    public required List<string> Models { get; set; }
+}

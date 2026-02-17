@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ApiService from '../services/api';
 import { RegistrationRequest } from '../types';
 
@@ -18,7 +19,7 @@ const MyRequestsPage: React.FC = () => {
       setRequests(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load registration requests');
+      setError('Anträge konnten nicht geladen werden');
       console.error(err);
     } finally {
       setLoading(false);
@@ -26,52 +27,67 @@ const MyRequestsPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">Vorgang wird geladen...</div>;
   }
 
   if (error) {
     return <div className="error">{error}</div>;
   }
 
+  const statusLabel = (status: string) => {
+    const map: Record<string, string> = {
+      Pending: 'Eingegangen',
+      UnderReview: 'In Prüfung',
+      Approved: 'Genehmigt',
+      Rejected: 'Abgelehnt',
+    };
+
+    return map[status] ?? status;
+  };
+
   return (
-    <div className="my-requests-page">
-      <h1>My Registration Requests</h1>
+    <div className="page my-requests-page">
+      <div className="page-header">
+        <div>
+          <h1>Meine Anträge</h1>
+          <p>Verfolgen Sie den aktuellen Bearbeitungsstand.</p>
+        </div>
+      </div>
       {requests.length === 0 ? (
-        <p>No registration requests found.</p>
+        <div className="card">Derzeit liegen keine Anträge vor.</div>
       ) : (
         <div className="requests-list">
           {requests.map((request) => (
-            <div key={request.id} className="request-card">
-              <h3>
-                {request.brand} {request.model} ({request.year})
-              </h3>
+            <Link to={`/my-requests/${request.id}`} key={request.id} className="request-card request-card-link">
+              <div className="card-header">
+                <div className="card-title">
+                  {request.brand} {request.model} ({request.year})
+                </div>
+                <span className="status-pill-small">
+                  {statusLabel(request.status)}
+                </span>
+              </div>
               <div className="request-details">
                 <p>
-                  <strong>VIN:</strong> {request.vin}
+                  <strong>FIN:</strong> {request.vin}
                 </p>
                 <p>
-                  <strong>Requested License Plate:</strong> {request.requestedLicensePlate}
+                  <strong>Wunschkennzeichen:</strong> {request.requestedLicensePlate}
                 </p>
                 <p>
-                  <strong>Color:</strong> {request.color}
+                  <strong>Farbe:</strong> {request.color}
                 </p>
                 <p>
-                  <strong>Status:</strong>{' '}
-                  <span className={`status-${request.status.toLowerCase()}`}>
-                    {request.status}
-                  </span>
-                </p>
-                <p>
-                  <strong>Submitted:</strong>{' '}
+                  <strong>Eingereicht:</strong>{' '}
                   {new Date(request.createdAt).toLocaleDateString()}
                 </p>
                 {request.rejectionReason && (
                   <p className="rejection-reason">
-                    <strong>Rejection Reason:</strong> {request.rejectionReason}
+                    <strong>Ablehnungsgrund:</strong> {request.rejectionReason}
                   </p>
                 )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

@@ -18,7 +18,7 @@ const MyVehiclesPage: React.FC = () => {
       setVehicles(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load vehicles');
+      setError('Fahrzeuge konnten nicht geladen werden');
       console.error(err);
     } finally {
       setLoading(false);
@@ -26,7 +26,7 @@ const MyVehiclesPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">Vorgang wird geladen...</div>;
   }
 
   if (error) {
@@ -34,29 +34,37 @@ const MyVehiclesPage: React.FC = () => {
   }
 
   return (
-    <div className="my-vehicles-page">
-      <h1>My Vehicles</h1>
+    <div className="page my-vehicles-page">
+      <div className="page-header">
+        <div>
+          <h1>Meine Fahrzeuge</h1>
+          <p>Übersicht über die registrierten Fahrzeuge.</p>
+        </div>
+      </div>
       {vehicles.length === 0 ? (
-        <p>No vehicles registered yet.</p>
+        <div className="card">Derzeit sind keine Fahrzeuge registriert.</div>
       ) : (
         <div className="vehicles-list">
           {vehicles.map((vehicle) => (
             <div key={vehicle.id} className="vehicle-card">
-              <h3>
-                {vehicle.brand} {vehicle.model} ({vehicle.year})
-              </h3>
+              <div className="card-header">
+                <div className="card-title">
+                  {vehicle.brand} {vehicle.model} ({vehicle.year})
+                </div>
+                <span className="badge">Aktiv</span>
+              </div>
               <div className="vehicle-details">
                 <p>
-                  <strong>License Plate:</strong> {vehicle.licensePlate}
+                  <strong>Kennzeichen:</strong> {vehicle.licensePlate}
                 </p>
                 <p>
-                  <strong>VIN:</strong> {vehicle.vin}
+                  <strong>FIN:</strong> {vehicle.vin}
                 </p>
                 <p>
-                  <strong>Color:</strong> {vehicle.color}
+                  <strong>Farbe:</strong> {vehicle.color}
                 </p>
                 <p>
-                  <strong>First Registration:</strong>{' '}
+                  <strong>Erstzulassung:</strong>{' '}
                   {new Date(vehicle.firstRegistrationDate).toLocaleDateString()}
                 </p>
               </div>
